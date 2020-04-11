@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import {Consumer} from './context'
 import uuid from 'react-uuid'
+import TextInputGroup from './TextInputGroup'
 
 export default class AddContact extends Component {
     state = {
@@ -8,6 +9,8 @@ export default class AddContact extends Component {
         email: '',
         phone: '',
         showAddContactInfo: false,
+        errors: {},
+
     }
     showAddContact = e => {
         this.setState({showAddContactInfo: !this.state.showAddContactInfo})
@@ -15,13 +18,29 @@ export default class AddContact extends Component {
     onSubmit = (dispatch, e) => {
         e.preventDefault();
         
-        const { name, email, phone} = this.state
+        const { name, email, phone,} = this.state
+        
+        //Check for errors
+        if (name === '') {
+            this.setState({errors: {name: 'Name is required'}})
+            return
+        }
+        if (email === '') {
+            this.setState({errors: {email: 'Email is required'}})
+            return
+        }
+        if (phone === '') {
+            this.setState({errors: {phone: 'Phone is required'}})
+            return
+        }
+
 
         const newContact = {
             id: uuid(),
             name,
             email,
-            phone 
+            phone,
+            errors: {}
         }
         dispatch({type: 'ADD_CONTACT', payload: newContact})
         
@@ -35,7 +54,7 @@ export default class AddContact extends Component {
     onChange = e => this.setState({[e.target.name]: e.target.value })
    
     render() {
-        const {name, email, phone, showAddContactInfo} = this.state 
+        const {name, email, phone, showAddContactInfo, errors} = this.state 
 
         return (
             <Consumer>
@@ -47,18 +66,31 @@ export default class AddContact extends Component {
                         {showAddContactInfo ? (
                             <div className = 'card-body'>
                             <form onSubmit = {this.onSubmit.bind(this, dispatch)}>
-                                <div className = 'form-group'>
-                                    <label htmlFor = 'name'>Name</label>
-                                    <input className = 'form-control form-control-md' onChange = {this.onChange} name = 'name' type = 'text' placeholder = 'Enter name ...' value = {name}/>
-                                </div>
-                                <div className = 'form-group'>   
-                                    <label htmlFor = 'email'>Email</label>
-                                    <input className = 'form-control form-control-md' onChange = {this.onChange} name = 'email' type = 'email' placeholder = 'Enter email ...' value = {email}/>
-                                </div>
-                                <div className = 'form-group'>
-                                    <label htmlFor = 'phone'>Phone</label>
-                                    <input className = 'form-control form-control-md' onChange = {this.onChange} name = 'phone' type = 'text' placeholder = 'Enter phone ...' value = {phone}/>                      
-                                </div>
+                                <TextInputGroup 
+                                label = 'Name' 
+                                name = 'name'
+                                placeholder = 'Enter name ...'
+                                value = {name}
+                                onChange = {this.onChange}
+                                error = {errors.name}
+                                />
+                                <TextInputGroup 
+                                label = 'Email' 
+                                name = 'email'
+                                placeholder = 'Enter email ...'
+                                value = {email}
+                                onChange = {this.onChange}
+                                type = 'email'
+                                error = {errors.email}
+                                />
+                                <TextInputGroup 
+                                label = 'Phone' 
+                                name = 'phone'
+                                placeholder = 'Enter phone ...'
+                                value = {phone}
+                                onChange = {this.onChange}
+                                error = {errors.phone}
+                                />
                                 <input type = 'submit' value = 'Add Contact' className = 'btn btn-block btn-light' />
                             </form>    
                         </div>
