@@ -10,6 +10,7 @@ export default class Contacts extends Component {
                     const {contacts} = value
                     return (
                         <React.Fragment>
+                            <h3 className = 'display-5 mb-2'>Contacts</h3>
                         {contacts.map(contact => 
                         <Contact
                             key = {contact.id}
