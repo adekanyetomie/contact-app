@@ -1,0 +1,1 @@
+Contact app built with react. Used context api for state management
