@@ -24,7 +24,7 @@ export default class Contact extends Component {
         }     
     }
     render() {
-        const {name, email, phone, id} = this.props.contact;
+        const {name, email, phone, id, address} = this.props.contact;
         const {showContactInfo} = this.state
 
         return (
@@ -37,6 +37,7 @@ export default class Contact extends Component {
                             {showContactInfo ? ( <ul className = 'list-group'>
                             <li className = 'list-group-item'>Email: {email}</li>
                             <li className = 'list-group-item'>Phone: {phone}</li>
+                            <li className = 'list-group-item'>Address: {address}</li>
                             </ul> ): null }
                        
                      </div>
